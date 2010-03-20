@@ -12,10 +12,13 @@ def build(indexpath, jsonpath):
     conn = xappy.IndexerConnection(indexpath)
     conn.add_field_action('location', xappy.FieldActions.GEOLOCATION)
     conn.add_field_action('data', xappy.FieldActions.STORE_CONTENT)
+    conn.add_field_action('hasaande', xappy.FieldActions.INDEX_EXACT)
     data = json.loads(open(jsonpath).read())
     for item in data:
         doc = xappy.UnprocessedDocument()
         doc.id = item['name'] + ' ' + item['postcode']
+        if bool(item.get('hasaande', False)):
+            doc.append('hasaande', '1')
         doc.append('location', item['latitude'] + ' ' + item['longitude'])
         doc.append('data', json.dumps(item))
         conn.replace(doc)

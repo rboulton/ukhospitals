@@ -20,7 +20,7 @@ def find_hospital(request):
         res['hospitals'] = search.all('hospitals.db', need_aande=need_aande)[:maxhits]
     else:
         res['query_location'] = loc
-        res['query_latlong'], res['registries'] = \
+        res['query_latlong'], res['hospitals'] = \
             search.search('hospitals.db', loc, maxhits=maxhits,
                           need_aande=need_aande)
     return res
@@ -29,16 +29,16 @@ def docs(request):
     tmpl = '''
 <html>
   <head>
-    <title>Registry Office Locator, API documentation</title>
+    <title>Hospital Locator, API documentation</title>
   </head>
   <body>
-    <h1>Registry Office Locator, API documentation</h1>
-    <h2>Find offices</h2>
+    <h1>Hospital Locator, API documentation</h1>
+    <h2>Find hospitals</h2>
     <p>
       <em>Base url</em>:
         <ul>
           <li>
-            <code>http://tartarus.org/richard/registries/find</code>
+            <code>http://tartarus.org/richard/hospitals/find</code>
           </li>
         </ul>
     </p>
@@ -47,7 +47,7 @@ def docs(request):
       <ul>
         <li>
           <code>loc</code>: The location to centre the search on.  May be an
-          address or a postcode.  If omitted, all registry offices will be
+          address or a postcode.  If omitted, all hospitals will be
           returned (subject to the <code>maxhits</code> parameter).
         </li>
         <li>
@@ -69,24 +69,32 @@ def docs(request):
           determined for the location (in decimal, separated by a space).
           Missing if no location was specified.
         </li><li>
-          <q><code>registries</code></q>: A list of registries, in order of
+          <q><code>hospitals</code></q>: A list of hospitals, in order of
           distance from the query location (unless no location specified, in
-          which case the order is undefined).  Each registry is a JSON object,
+          which case the order is undefined).  Each hospitals is a JSON object,
           with the following attributes:
           <ul><li>
-            <q><code>name</code></q>: The name of the registry office.
+            <q><code>name</code></q>: The name of the hospital.
            </li><li>
-            <q><code>addresss</code></q>: The address of the registry office.
+            <q><code>addresss</code></q>: The address of the hospital (usually
+            very vague).
            </li><li>
-            <q><code>postcode</code></q>: The postcode of the registry office.
+            <q><code>postcode</code></q>: The postcode of the hospital.
            </li><li>
-            <q><code>longlat</code></q>: The location of the registry office,
-            as a list of two items; longitude first.
+            <q><code>longitude</code></q>: The longitude of the hospital.
+           </li><li>
+            <q><code>latitude</code></q>: The latitude of the hospital.
            </li><li>
             <q><code>dist_miles</code></q>: Distance from the query location in
             miles: omitted if no location was specified.
+           </li><li>
+            <q><code>hasaande</code></q>: true if the hospital has accident and
+            emergency services.  false otherwise.
+           </li><li>
+            <q><code>telephone</code></q>: a telephone number for the hospital.
+            Not always present, and may not be just one number.
           </li></ul>
-          Other fields may be present, but aren't for all registry offices.
+          Other fields may be present, but aren't for all hospitals.
         </li>
       </ul>
     </p>
@@ -104,7 +112,7 @@ def frontpage(request):
   <body>
     <ul>
     <li>
-    <a href="find">Find offices API</a>
+    <a href="find">Find hospitals API</a>
     </li>
     <li>
     <a href="docs">API documentation</a>

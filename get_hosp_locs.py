@@ -40,6 +40,13 @@ def get():
             col = mapping.get(col, None)
             if col is None:
                 continue
+            if col == 'hasaande':
+                if val == 'false':
+                    val = False
+                elif val == 'true':
+                    val = True
+                else:
+                    raise ValueError("Base hasaande value: %r" % val)
             if col in data:
                 data[col] += ', ' + val
             else:

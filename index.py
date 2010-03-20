@@ -28,6 +28,8 @@ if __name__ == '__main__':
     if os.path.exists('hospitals.db.tmp'):
         shutil.rmtree('hospitals.db.tmp')
     build('hospitals.db.tmp', 'hosplocs.json')
-    os.rename('hospitals.db', 'hospitals.db.old')
+    if os.path.exists('hospitals.db'):
+        os.rename('hospitals.db', 'hospitals.db.old')
     os.rename('hospitals.db.tmp', 'hospitals.db')
-    shutil.rmtree('hospitals.db.old')
+    if os.path.exists('hospitals.db.old'):
+        shutil.rmtree('hospitals.db.old')
